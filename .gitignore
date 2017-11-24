@@ -5,7 +5,7 @@
 
 # dependencies
 /fronend/node_modules
-
+/frontend/package-lock.json
 # IDEs and editors
 /fronend/.idea
 /fronend/.project
