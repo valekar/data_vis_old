@@ -1,0 +1,43 @@
+# compiled output
+/fronend/dist
+/fronend/tmp
+/fronend/out-tsc
+
+# dependencies
+/fronend/node_modules
+
+# IDEs and editors
+/fronend/.idea
+/fronend/.project
+/fronend/.classpath
+/fronend/.c9/
+/fronend/*.launch
+/fronend/.settings/
+/fronend/*.sublime-workspace
+
+# IDE - VSCode
+.vscode/*
+/fronend/!.vscode/settings.json
+/fronend/!.vscode/tasks.json
+/fronend/!.vscode/launch.json
+/fronend/!.vscode/extensions.json
+
+# misc
+/fronend/.sass-cache
+/fronend/connect.lock
+/fronend/coverage
+/fronend/libpeerconnection.log
+/fronend/npm-debug.log
+/fronend/testem.log
+/fronend/typings
+/fronend/docs
+
+# e2e
+/fronend/e2e/*.js
+/fronend/e2e/*.map
+
+# System Files
+/fronend/.DS_Store
+/fronend/Thumbs.db
+
+/server/soccer.sqlite

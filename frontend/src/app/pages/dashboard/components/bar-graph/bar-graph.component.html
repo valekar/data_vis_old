@@ -1,0 +1,7 @@
+<div class="row">
+  <div class="col-4">
+    <select class="form-control" [(ngModel)]="selectedTeam" (change)="teamSelection()">
+      <option *ngFor="let team of teamList" [ngValue]="team.team_api_id">{{team.team_long_name}}</option>
+    </select>
+  </div>
+</div>
