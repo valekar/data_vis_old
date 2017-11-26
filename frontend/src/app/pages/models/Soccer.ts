@@ -22,3 +22,7 @@ export class Match{
     loss:number;
     draw:number;
 }
+
+export class MatchData{
+    data:Array<Match>
+}
