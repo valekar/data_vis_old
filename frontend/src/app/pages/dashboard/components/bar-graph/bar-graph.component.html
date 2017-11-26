@@ -1,6 +1,6 @@
 <div class="row">
   <div class="col-4">
-    <select class="form-control" [(ngModel)]="selectedTeam" (change)="teamSelection()">
+    <select class="form-control" [(ngModel)]="selectedTeamId" (change)="teamSelection()">
       <option *ngFor="let team of teamList" [ngValue]="team.team_api_id">{{team.team_long_name}}</option>
     </select>
   </div>
@@ -18,6 +18,12 @@
   <div class="col-11">
     <div #myBarGraph></div>
   </div>
+</div>
 
-  
+<div class="row" *ngIf="selectedTeamId>0">
+<div class="col-3"></div>
+<div class="col-6">
+  <button class="btn btn-primary btn-xs" (click)="seeTeamAttributes()" >See Team Attributes</button>
+</div>
+<div class="col-3"></div>
 </div>

@@ -1,7 +1,7 @@
 from flask import Flask, request
 from flask_restful import Resource, Api
 from sqlalchemy import create_engine
-from MyQueries import MATCH_STAT_QUERY,GET_ALL_TEAMS_QUERY
+from MyQueries import MATCH_STAT_QUERY, GET_ALL_TEAMS_QUERY,GET_TEAM_ATTRIBUTE
 
 e = create_engine('sqlite:///soccer.sqlite')
 
@@ -9,7 +9,7 @@ app = Flask(__name__)
 api = Api(app)
 
 
-class Match_Meta(Resource):
+class MatchMeta(Resource):
     def get(self, id):
         # Connect to databse
         conn = e.connect()
@@ -19,7 +19,7 @@ class Match_Meta(Resource):
         return {'data': [dict(zip(tuple(query.keys()), i)) for i in query.cursor.fetchall()]}
 
 
-class Teams_Meta(Resource):
+class TeamsMeta(Resource):
     def get(self):
         conn = e.connect()
         # Perform query and return JSON data
@@ -28,8 +28,20 @@ class Teams_Meta(Resource):
         return {'data': [dict(zip(tuple(query.keys()), i)) for i in query.cursor.fetchall()]}
 
 
-api.add_resource(Match_Meta, '/api/matches/<int:id>')
-api.add_resource(Teams_Meta, '/api/teams/')
+class TeamAttributeMeta(Resource):
+    def get(self, id):
+        # Connect to database
+        conn = e.connect()
+        # Perform query and return JSON data
+        query = GET_TEAM_ATTRIBUTE
+        query = conn.execute(query + str(id))
+        #self.fetchall =
+        return {'data': [dict(zip(tuple(query.keys()), i)) for i in query.cursor.fetchall()]}
+
+
+api.add_resource(MatchMeta, '/api/matches/<int:id>')
+api.add_resource(TeamsMeta, '/api/teams/')
+api.add_resource(TeamAttributeMeta, '/api/teams/attribute/<int:id>')
 
 if __name__ == '__main__':
     app.run()

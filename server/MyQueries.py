@@ -23,4 +23,19 @@ on t.team_api_id = m.home_team_api_id OR t.team_api_id = m.away_team_api_id
 group by m.season,t.team_api_id
 having t.team_api_id = """
 
-GET_ALL_TEAMS_QUERY = """select id,team_api_id,team_fifa_api_id,team_long_name , team_short_name from Team order by team_long_name asc"""
+GET_ALL_TEAMS_QUERY = """select id,team_api_id,team_fifa_api_id,
+team_long_name , team_short_name from Team order by team_long_name asc"""
+
+
+GET_TEAM_ATTRIBUTE ="""select 
+ team_api_id , 
+ date , 
+ buildUpPlaySpeed ,  
+ buildUpPlayPassing , 
+ chanceCreationPassing ,  
+ chanceCreationCrossing ,  
+ chanceCreationShooting ,   
+ defencePressure , 
+ defenceAggression , 
+ defenceTeamWidth   
+from Team_Attributes where team_api_id ="""

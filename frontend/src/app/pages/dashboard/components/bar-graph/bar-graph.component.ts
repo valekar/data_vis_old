@@ -12,11 +12,11 @@ import { Selection } from 'd3-selection';
   styleUrls: ['./bar-graph.component.scss'],
   providers: [BarService]
 })
-export class BarGraphComponent implements OnInit, AfterViewInit {
+export class BarGraphComponent implements OnInit {
 
 
   teamList: Array<Team>;
-  selectedTeam: number;
+  selectedTeamId: number = -1 ;
   matches: Array<Match>;
   host: any;
   svg: any;
@@ -32,21 +32,22 @@ export class BarGraphComponent implements OnInit, AfterViewInit {
     });
   }
 
-  ngAfterViewInit(): void {
-
-  }
-
-
   teamSelection() {
     //console.log(this.selectedTeam);
-    this.barService.getMatch(this.selectedTeam).subscribe((res: MatchData) => {
-      console.log(res);
+    this.barService.getMatch(this.selectedTeamId).subscribe((res: MatchData) => {
+      //console.log(res);
       this.matches = res.data;
       this.host = d3.select(this.myBarGraph.nativeElement);
       //console.log(this.renderer.parentNode);
       this.buildSVG(this.matches);
     });
   }
+
+
+  seeTeamAttributes(){
+    console.log(this.selectedTeamId);
+  }
+
 
   buildSVG(matches: any): void {
     //    //this.host.html('');
@@ -104,7 +105,7 @@ export class BarGraphComponent implements OnInit, AfterViewInit {
       .offset(d3.stackOffsetNone);
 
     let layers = stack(<any>matches);
-    console.log(layers);
+    //console.log(layers);
     matches.sort(function (a, b) { return b.total - a.total; });
 
     // set the ranges
