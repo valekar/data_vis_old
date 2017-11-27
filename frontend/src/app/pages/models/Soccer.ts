@@ -27,7 +27,6 @@ export class MatchData {
     data: Array<Match>
 }
 
-
 export class TeamAttributes {
     team_api_id: number;
     date: string;
@@ -43,4 +42,37 @@ export class TeamAttributes {
 
 export class TeamAttributesData{
     data:Array<TeamAttributes>;
+}
+
+
+//geodata
+export class GeoData{
+    data:Array<Geo>;
+}
+
+export class Geo{
+    features:Array<Feature>;
+    type:string;
+}
+
+export class Feature{
+    geometry:Geometry;
+    properties:any;
+}
+
+export class Geometry{
+    type:string;
+    coordinates:any;
+}
+
+export class CountryMatchesData{
+    data:Array<CountryMatches>;
+}
+
+export class CountryMatches{
+    id:number;
+    name:string;
+    country_id:number;
+    league_name:string;
+    total_matches:number;
 }

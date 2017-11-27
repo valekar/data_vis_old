@@ -39,3 +39,11 @@ GET_TEAM_ATTRIBUTE ="""select
  defenceAggression , 
  defenceTeamWidth   
 from Team_Attributes where team_api_id ="""
+
+GET_COUNTRY_MATCHES  = """
+select c.id ,c.name,l.country_id,l.name as league_name ,m.country_id, count(m.id) as total_matches from country c 
+inner join League l on l.country_id = c.id
+inner join Match m on m.country_id = c.id
+group by c.name 
+order by count(m.id) asc
+"""
