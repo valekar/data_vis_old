@@ -1,6 +1,6 @@
 import { Component, OnInit, ElementRef, ViewChildren, Renderer2, AfterViewInit, QueryList, ViewChild } from '@angular/core';
 import { BarService } from '../../services/bar.service';
-import { Team, TeamData, Match, MatchData } from '../../../models/Soccer';
+import { Team, TeamData, Match, MatchData, TeamAttributes,TeamAttributesData } from '../../../models/Soccer';
 import * as d3 from 'd3/index';
 import { Element } from '@angular/compiler';
 import { ElementDef } from '@angular/core/src/view';
@@ -23,6 +23,11 @@ export class BarGraphComponent implements OnInit {
   svg: any;
   @ViewChild('myBarGraph') myBarGraph: ElementRef;
 
+
+  //spider chart
+  toggleSpiderChart:boolean = false;
+  teamAttribute:TeamAttributes = null;
+  toggleNoData:boolean = false;
   constructor(private barService: BarService, private renderer: Renderer2,private router:Router) {
 
   }
@@ -34,6 +39,8 @@ export class BarGraphComponent implements OnInit {
   }
 
   teamSelection() {
+    this.toggleSpiderChart = false;
+    this.toggleNoData = false;
     //console.log(this.selectedTeam);
     this.barService.getMatch(this.selectedTeamId).subscribe((res: MatchData) => {
       //console.log(res);
@@ -158,9 +165,21 @@ export class BarGraphComponent implements OnInit {
         .style("opacity", 0);
         //console.log(d);
         let year = d.data.season.match(/\/(.*)/);
-        console.log(year[1]);
-        this.seeTeamAttributes(year[1]);
-        //this.router.navigate([`/pages/dashboard/team/attributes/${this.selectedTeamId}/${year[1]}`])
+        //console.log(year[1]);
+
+        //this.seeTeamAttributes(year[1]);
+        this.barService.getTeamAttributes(this.selectedTeamId,year[1]).subscribe((res:TeamAttributesData)=>{  
+          if(res.data.length>0){
+            this.teamAttribute = res.data[0];
+            this.toggleNoData = false;          
+            this.toggleSpiderChart = true;
+          }
+          else{
+            this.toggleSpiderChart = false;
+            this.toggleNoData = true;
+          }
+
+        });
       })
 
 
