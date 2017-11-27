@@ -43,7 +43,7 @@ export class SpiderChartDirective implements OnChanges {
       TranslateY: 30,
       ExtraWidthX: 300,//100,
       ExtraWidthY: 100,
-      color: d3.scaleOrdinal().range(["#718EA4", "#4D6A83"])
+      color: d3.scaleOrdinal().range(["steelblue", "#4D6A83"])
     };
     let intermediaryData: Array<number> = [];
 
@@ -103,7 +103,7 @@ export class SpiderChartDirective implements OnChanges {
         .attr("x2", function (d, i) { return levelFactor * (1 - cfg.factor * Math.sin((i + 1) * cfg.radians / total)); })
         .attr("y2", function (d, i) { return levelFactor * (1 - cfg.factor * Math.cos((i + 1) * cfg.radians / total)); })
         .attr("class", "line")
-        .style("stroke", "grey")
+        .style("stroke", "steelblue")
         .style("stroke-opacity", "0.75")
         .style("stroke-width", "0.3px")
         .attr("transform", "translate(" + (cfg.w / 2 - levelFactor) + ", " + (cfg.h / 2 - levelFactor) + ")");
@@ -146,6 +146,7 @@ export class SpiderChartDirective implements OnChanges {
       .attr("class", "line")
       .style("stroke", "grey")
       .style("stroke-width", "1px");
+      
 
 
     axis.append("text")
@@ -185,7 +186,7 @@ export class SpiderChartDirective implements OnChanges {
       .append("polygon")
       .attr("class", "radar-chart-serie" + series)
       .style("stroke-width", "2px")
-      .style("stroke", cfg.color(series + ""))
+      .style("stroke", "")
       .attr("points", function (d) {
         var str = "";
         for (var pti = 0; pti < d.length; pti++) {
@@ -193,9 +194,18 @@ export class SpiderChartDirective implements OnChanges {
         }
         return str;
       })
+      .style("fill", function (j, i) { return 0 })
+      .style("fill-opacity", "")
+      .transition()
+			.duration(200)
+			.delay(function (d, i) {
+				return i * 50;
+      })
+      .style("stroke", cfg.color(series + ""))
       .style("fill", function (j, i) { return cfg.color(series + "") })
-      .style("fill-opacity", cfg.opacityArea)
-      .on('mouseover', function (d) {
+      .style("fill-opacity", cfg.opacityArea);
+
+      g.on('mouseover', function (d) {
         let z = "polygon." + d3.select(this).attr("class");
         g.selectAll("polygon")
           .transition(200)

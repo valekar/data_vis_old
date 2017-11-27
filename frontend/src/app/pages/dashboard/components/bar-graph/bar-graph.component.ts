@@ -41,7 +41,7 @@ export class BarGraphComponent implements OnInit {
   teamSelection() {
     this.toggleSpiderChart = false;
     this.toggleNoData = false;
-    
+
     this.barService.getMatch(this.selectedTeamId).subscribe((res: MatchData) => {
       //console.log(res);
       this.matches = res.data;
@@ -133,7 +133,7 @@ export class BarGraphComponent implements OnInit {
       .enter().append("rect")
       .attr("x", (d) => { return x(d.data.season); })
       .attr("y", function (d) { return y(d[1]); })
-      .attr("height", function (d) { return y(d[0]) - y(d[1]); })
+      .attr("height", function (d) { return 0; })
       .attr("width", x.bandwidth())
       .on('mouseover', function (d) {
         div.transition()
@@ -172,7 +172,15 @@ export class BarGraphComponent implements OnInit {
           }
 
         });
-      })
+      }).transition()
+			.duration(200)
+			.delay(function (d, i) {
+				return i * 50;
+			})
+			.attr("x", (d) => { return x(d.data.season); })
+      .attr("y", function (d) { return y(d[1]); })
+      .attr("height", function (d) { return y(d[0]) - y(d[1]); })
+      .attr("width", x.bandwidth())
 
 
     layer.selectAll("text").data(function (d) { return d }).enter().append("text")
