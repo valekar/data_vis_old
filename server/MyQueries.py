@@ -29,7 +29,7 @@ team_long_name , team_short_name from Team order by team_long_name asc"""
 
 GET_TEAM_ATTRIBUTE ="""select 
  team_api_id , 
- date , 
+ strftime('%Y',date) as date, 
  buildUpPlaySpeed ,  
  buildUpPlayPassing , 
  chanceCreationPassing ,  

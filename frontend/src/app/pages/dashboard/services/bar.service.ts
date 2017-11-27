@@ -24,4 +24,10 @@ export class BarService {
     .catch((err:Response)=> {return Observable.throw(err.json())});
   }
 
+  getTeamAttributes(teamId:number,year:number){
+    return this.http.get(URLS.TEAM_ATTRIBUTES_URL+teamId+"/"+year,this.commonService.getHeaderOptions())
+      .map((res:Response)=>{return res.json()})
+      .catch((err:Response)=>{return Observable.throw(err.json())})
+  }
+
 }

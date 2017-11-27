@@ -5,6 +5,7 @@ import * as d3 from 'd3/index';
 import { Element } from '@angular/compiler';
 import { ElementDef } from '@angular/core/src/view';
 import { Selection } from 'd3-selection';
+import {Router } from '@angular/router';
 
 @Component({
   selector: 'bar-graph',
@@ -22,7 +23,7 @@ export class BarGraphComponent implements OnInit {
   svg: any;
   @ViewChild('myBarGraph') myBarGraph: ElementRef;
 
-  constructor(private barService: BarService, private renderer: Renderer2) {
+  constructor(private barService: BarService, private renderer: Renderer2,private router:Router) {
 
   }
 
@@ -44,10 +45,12 @@ export class BarGraphComponent implements OnInit {
   }
 
 
-  seeTeamAttributes(){
-    console.log(this.selectedTeamId);
+  seeTeamAttributes(year){
+    //console.log(this.selectedTeamId);
+    this.router.navigate([`/pages/dashboard/team/attributes/${this.selectedTeamId}/${year}`])
   }
 
+  
 
   buildSVG(matches: any): void {
     //    //this.host.html('');
@@ -142,8 +145,22 @@ export class BarGraphComponent implements OnInit {
                   Total Wins : ${d.data.win}<br> 
                   Total Losses: ${d.data.lose} <br> 
                   Total Draws: ${d.data.draw}</div>`)
-          .style("left", (d3.event.pageX) + "px")
-          .style("top", (d3.event.pageY - 28) + "px");
+          .style("left", (d3.event.pageX+100) + "px")
+          .style("top", (d3.event.pageY+50 ) + "px");
+      }).on("mouseout", function (d) {
+           div.transition()
+             .duration(0)
+             .style("opacity", 0);
+         })
+      .on('click',(d)=>{
+        div.transition()
+        .duration(0)
+        .style("opacity", 0);
+        //console.log(d);
+        let year = d.data.season.match(/\/(.*)/);
+        console.log(year[1]);
+        this.seeTeamAttributes(year[1]);
+        //this.router.navigate([`/pages/dashboard/team/attributes/${this.selectedTeamId}/${year[1]}`])
       })
 
 

@@ -29,19 +29,19 @@ class TeamsMeta(Resource):
 
 
 class TeamAttributeMeta(Resource):
-    def get(self, id):
+    def get(self, id,year):
         # Connect to database
         conn = e.connect()
         # Perform query and return JSON data
         query = GET_TEAM_ATTRIBUTE
-        query = conn.execute(query + str(id))
+        query = conn.execute(query + str(id) + ' AND date like \'%'+ str(year)+'%\'')
         #self.fetchall =
         return {'data': [dict(zip(tuple(query.keys()), i)) for i in query.cursor.fetchall()]}
 
 
 api.add_resource(MatchMeta, '/api/matches/<int:id>')
 api.add_resource(TeamsMeta, '/api/teams/')
-api.add_resource(TeamAttributeMeta, '/api/teams/attribute/<int:id>')
+api.add_resource(TeamAttributeMeta, '/api/teams/attribute/<int:id>/<int:year>')
 
 if __name__ == '__main__':
     app.run()
