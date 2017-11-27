@@ -1,11 +1,11 @@
 import { Component, OnInit, ElementRef, ViewChildren, Renderer2, AfterViewInit, QueryList, ViewChild } from '@angular/core';
 import { BarService } from '../../services/bar.service';
-import { Team, TeamData, Match, MatchData, TeamAttributes,TeamAttributesData } from '../../../models/Soccer';
+import { Team, TeamData, Match, MatchData, TeamAttributes, TeamAttributesData } from '../../../models/Soccer';
 import * as d3 from 'd3/index';
 import { Element } from '@angular/compiler';
 import { ElementDef } from '@angular/core/src/view';
 import { Selection } from 'd3-selection';
-import {Router } from '@angular/router';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'bar-graph',
@@ -17,7 +17,7 @@ export class BarGraphComponent implements OnInit {
 
 
   teamList: Array<Team>;
-  selectedTeamId: number = -1 ;
+  selectedTeamId: number = -1;
   matches: Array<Match>;
   host: any;
   svg: any;
@@ -25,10 +25,10 @@ export class BarGraphComponent implements OnInit {
 
 
   //spider chart
-  toggleSpiderChart:boolean = false;
-  teamAttribute:TeamAttributes = null;
-  toggleNoData:boolean = false;
-  constructor(private barService: BarService, private renderer: Renderer2,private router:Router) {
+  toggleSpiderChart: boolean = false;
+  teamAttribute: TeamAttributes = null;
+  toggleNoData: boolean = false;
+  constructor(private barService: BarService, private renderer: Renderer2, private router: Router) {
 
   }
 
@@ -41,25 +41,17 @@ export class BarGraphComponent implements OnInit {
   teamSelection() {
     this.toggleSpiderChart = false;
     this.toggleNoData = false;
-    //console.log(this.selectedTeam);
+    
     this.barService.getMatch(this.selectedTeamId).subscribe((res: MatchData) => {
       //console.log(res);
       this.matches = res.data;
       this.host = d3.select(this.myBarGraph.nativeElement);
       //console.log(this.renderer.parentNode);
-      this.buildSVG(this.matches);
+      this.buildstackedBar(this.matches);
     });
   }
 
-
-  seeTeamAttributes(year){
-    //console.log(this.selectedTeamId);
-    this.router.navigate([`/pages/dashboard/team/attributes/${this.selectedTeamId}/${year}`])
-  }
-
-  
-
-  buildSVG(matches: any): void {
+  buildstackedBar(matches: any): void {
     //    //this.host.html('');
     //  // console.log(this.host);
     //   this.svg = this.renderer.createElement('svg');
@@ -106,7 +98,7 @@ export class BarGraphComponent implements OnInit {
     }
 
 
-    let keys = ['win','draw','lose'];
+    let keys = ['win', 'draw', 'lose'];
 
     let color = d3.scaleOrdinal(d3.schemeCategory20);
     let stack = d3.stack()
@@ -152,29 +144,29 @@ export class BarGraphComponent implements OnInit {
                   Total Wins : ${d.data.win}<br> 
                   Total Losses: ${d.data.lose} <br> 
                   Total Draws: ${d.data.draw}</div>`)
-          .style("left", (d3.event.pageX+100) + "px")
-          .style("top", (d3.event.pageY+50 ) + "px");
+          .style("left", (d3.event.pageX + 100) + "px")
+          .style("top", (d3.event.pageY + 50) + "px");
       }).on("mouseout", function (d) {
-           div.transition()
-             .duration(0)
-             .style("opacity", 0);
-         })
-      .on('click',(d)=>{
         div.transition()
-        .duration(0)
-        .style("opacity", 0);
+          .duration(0)
+          .style("opacity", 0);
+      })
+      .on('click', (d) => {
+        div.transition()
+          .duration(0)
+          .style("opacity", 0);
         //console.log(d);
         let year = d.data.season.match(/\/(.*)/);
         //console.log(year[1]);
 
         //this.seeTeamAttributes(year[1]);
-        this.barService.getTeamAttributes(this.selectedTeamId,year[1]).subscribe((res:TeamAttributesData)=>{  
-          if(res.data.length>0){
+        this.barService.getTeamAttributes(this.selectedTeamId, year[1]).subscribe((res: TeamAttributesData) => {
+          if (res.data.length > 0) {
             this.teamAttribute = res.data[0];
-            this.toggleNoData = false;          
+            this.toggleNoData = false;
             this.toggleSpiderChart = true;
           }
-          else{
+          else {
             this.toggleSpiderChart = false;
             this.toggleNoData = true;
           }
@@ -185,9 +177,9 @@ export class BarGraphComponent implements OnInit {
 
     layer.selectAll("text").data(function (d) { return d }).enter().append("text")
       //.text(function (d) { return d3.format(".3s")(((d[1] - d[0])/+d.data.total_matches)*100) + "%"; })
-      .text(function (d) { return d3.format(".3s")(((d[1] - d[0])/+d.data.total_matches)*100) + "%"; })
+      .text(function (d) { return d3.format(".3s")(((d[1] - d[0]) / +d.data.total_matches) * 100) + "%"; })
       .attr("y", function (d) { return y(d[1]) + (y(d[0]) - y(d[1])) / 2; })
-      .attr("x", function (d) { return x(d.data.season)+x.bandwidth()/4 })
+      .attr("x", function (d) { return x(d.data.season) + x.bandwidth() / 4 })
       .style("fill", '#ffffff');
 
 
@@ -214,30 +206,30 @@ export class BarGraphComponent implements OnInit {
       .text("Years");
 
 
-      var legendRectSize = 18;                                  
-      var legendSpacing = 4;                                    
+    var legendRectSize = 18;
+    var legendSpacing = 4;
 
-      let legend =  this.svg.selectAll('.legend').data(color.domain()).enter().append('g')
-        .attr('class','legend')
-        .attr('transform', function(d, i) {                     
-          var height = legendRectSize + legendSpacing;          
-          var offset =  height * color.domain().length / 2;     
-          var horz = 10 * legendRectSize;                       
-          var vert = i * height ;                       
-          return 'translate(' + horz + ',' + vert + ')';        
-        }); 
+    let legend = this.svg.selectAll('.legend').data(color.domain()).enter().append('g')
+      .attr('class', 'legend')
+      .attr('transform', function (d, i) {
+        var height = legendRectSize + legendSpacing;
+        var offset = height * color.domain().length / 2;
+        var horz = 10 * legendRectSize;
+        var vert = i * height;
+        return 'translate(' + horz + ',' + vert + ')';
+      });
 
 
-        legend.append('rect')                                   
-        .attr('width', legendRectSize)                          
-        .attr('height', legendRectSize)                         
-        .style('fill', color)                                   
-        .style('stroke', color);  
+    legend.append('rect')
+      .attr('width', legendRectSize)
+      .attr('height', legendRectSize)
+      .style('fill', color)
+      .style('stroke', color);
 
-        legend.append('text')                                    
-        .attr('x', legendRectSize + legendSpacing)              
-        .attr('y', legendRectSize - legendSpacing)              
-        .text(function(d) { return keys[d]; }); 
+    legend.append('text')
+      .attr('x', legendRectSize + legendSpacing)
+      .attr('y', legendRectSize - legendSpacing)
+      .text(function (d) { return keys[d]; });
   }
 
 
