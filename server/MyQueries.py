@@ -16,7 +16,7 @@ SUM(CASE
 		 (m.away_team_api_id = team_api_id and m.away_team_goal < m.home_team_goal and m.home_team_goal <> m.away_team_goal)
 	THEN 1
 	ELSE 0
-	END) as lose,
+	END) as loss,
 SUM(CASE WHEN m.home_team_goal = m.away_team_goal THEN 1 ELSE 0 END) as draw
 from match m inner join team t
 on t.team_api_id = m.home_team_api_id OR t.team_api_id = m.away_team_api_id

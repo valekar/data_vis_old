@@ -98,7 +98,7 @@ export class BarGraphComponent implements OnInit {
     }
 
 
-    let keys = ['win', 'draw', 'lose'];
+    let keys = ['win', 'draw', 'loss'];
 
     let color = d3.scaleOrdinal(d3.schemeCategory20);
     let stack = d3.stack()
@@ -142,7 +142,7 @@ export class BarGraphComponent implements OnInit {
         div.html(`<div style="color:white;background-color:black;"> 
                   Season : ${d.data.season}<br>
                   Total Wins : ${d.data.win}<br> 
-                  Total Losses: ${d.data.lose} <br> 
+                  Total Losses: ${d.data.loss} <br> 
                   Total Draws: ${d.data.draw}</div>`)
           .style("left", (d3.event.pageX + 100) + "px")
           .style("top", (d3.event.pageY + 50) + "px");
